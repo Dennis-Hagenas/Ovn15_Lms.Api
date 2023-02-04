@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Lms.Data.Repositories
 {
-    public class TournamentRepository
+    public class TournamentRepository : ITournamentRepository
     {
         private readonly LmsApiContext db;
 
-        public TournamentRepository(LmsApiContext db) {
+        public TournamentRepository(LmsApiContext db)
+        {
             this.db = db;
         }
 

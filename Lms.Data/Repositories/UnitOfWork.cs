@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace Lms.Data.Repositories
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly LmsApiContext db;
-        public TournamentRepository TournamenRepository { get; }
+        public ITournamentRepository TournamenRepository { get; }
+        public IGameRepository GameRepository { get; }
 
-        public UnitOfWork(LmsApiContext db) {
+        public UnitOfWork(LmsApiContext db)
+        {
             this.db = db;
             TournamenRepository = new TournamentRepository(db);
+            GameRepository = new GameRepository(db);
         }
 
         public async Task CompleteAsync()
