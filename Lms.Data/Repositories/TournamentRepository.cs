@@ -1,4 +1,6 @@
-﻿using Lms.Data.Data;
+﻿using Lms.Core.Entities;
+using Lms.Data.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,11 @@ namespace Lms.Data.Repositories
 
         public TournamentRepository(LmsApiContext db) {
             this.db = db;
+        }
+
+        public async Task<IEnumerable<Tournament>> GetAsync()
+        {
+            return await db.Tournament.ToListAsync();
         }
     }
 }

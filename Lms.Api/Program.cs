@@ -8,6 +8,7 @@ builder.Services.AddDbContext<LmsApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found.")));
 
 // Add services to the container.
+builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true);
 
 builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()

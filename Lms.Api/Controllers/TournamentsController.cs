@@ -21,7 +21,9 @@ namespace Lms.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
         {
-            return null;// await _context.Tournament.ToListAsync();
+            var events = await uow.TournamenRepository.GetAsync();
+
+            return Ok(events);    
         }
 
     }
