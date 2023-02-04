@@ -17,9 +17,32 @@ namespace Lms.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<Tournament>> GetAsync()
+        public async Task<IEnumerable<Tournament>> GetAllAsync()
         {
             return await db.Tournament.ToListAsync();
+        }
+
+        public async Task<Tournament> GetAsync(int id)
+        {
+            return db.Tournament.FirstOrDefault(g => g.Id == id);
+        }
+
+        public Task<bool> AnyAsync(int id)
+        {
+            return db.Tournament.AnyAsync(g => g.Id == id);
+        }
+
+        public void Add(Tournament tournament)
+        {
+            db.Add(tournament);
+        }
+        public void Update(Tournament tournament)
+        {
+            db.Tournament.Update(tournament);
+        }
+        public void Remove(Tournament tournament)
+        {
+            db.Remove(tournament);
         }
     }
 }
