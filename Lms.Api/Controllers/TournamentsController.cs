@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
-using Lms.Data.Data;
 using Lms.Data.Repositories;
 
 namespace Lms.Api.Controllers
@@ -10,11 +8,11 @@ namespace Lms.Api.Controllers
     [ApiController]
     public class TournamentsController : ControllerBase
     {
-        private UnitOfWork uow;
+        private IUnitOfWork uow;
 
-        public TournamentsController(LmsApiContext db)
+        public TournamentsController(IUnitOfWork unitOfWork)
         {
-            uow = new UnitOfWork(db);
+            uow = unitOfWork;
         }
 
         // GET: api/Tournaments
@@ -25,6 +23,5 @@ namespace Lms.Api.Controllers
 
             return Ok(events);    
         }
-
     }
 }

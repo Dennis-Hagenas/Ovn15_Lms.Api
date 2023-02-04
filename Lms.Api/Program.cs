@@ -2,13 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Lms.Data.Data;
 using Lms.Api.Extensions;
+using Lms.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LmsApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found.")));
 
 // Add services to the container.
-builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true);
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()
