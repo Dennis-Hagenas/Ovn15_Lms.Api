@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Lms.Core.Entities;
 using Lms.Data.Repositories;
+using AutoMapper;
 
 namespace Lms.Api.Controllers
 {
@@ -9,10 +10,12 @@ namespace Lms.Api.Controllers
     public class TournamentsController : ControllerBase
     {
         private IUnitOfWork uow;
+        private readonly Mapper mapper;
 
-        public TournamentsController(IUnitOfWork unitOfWork)
+        public TournamentsController(IUnitOfWork unitOfWork, Mapper mapper)
         {
             uow = unitOfWork;
+            this.mapper = mapper;
         }
 
         // GET: api/Tournaments
