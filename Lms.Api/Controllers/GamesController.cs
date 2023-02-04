@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
 
 namespace Lms.Api.Controllers
 {
-    public class GamesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
 
@@ -19,145 +21,104 @@ namespace Lms.Api.Controllers
             _context = context;
         }
 
-        // GET: Games
-        public async Task<IActionResult> Index()
+        // GET: api/Games
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
         {
-              return _context.Game != null ? 
-                          View(await _context.Game.ToListAsync()) :
-                          Problem("Entity set 'LmsApiContext.Game'  is null.");
+          if (_context.Game == null)
+          {
+              return NotFound();
+          }
+            return await _context.Game.ToListAsync();
         }
 
-        // GET: Games/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Games/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Game>> GetGame(int id)
         {
-            if (id == null || _context.Game == null)
-            {
-                return NotFound();
-            }
-
-            var game = await _context.Game
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            return View(game);
-        }
-
-        // GET: Games/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Games/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Time,TournamentId")] Game game)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(game);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(game);
-        }
-
-        // GET: Games/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Game == null)
-            {
-                return NotFound();
-            }
-
+          if (_context.Game == null)
+          {
+              return NotFound();
+          }
             var game = await _context.Game.FindAsync(id);
+
             if (game == null)
             {
                 return NotFound();
             }
-            return View(game);
+
+            return game;
         }
 
-        // POST: Games/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Time,TournamentId")] Game game)
+        // PUT: api/Games/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutGame(int id, Game game)
         {
             if (id != game.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(game).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(game);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GameExists(game.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(game);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GameExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Games/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/Games
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Game>> PostGame(Game game)
         {
-            if (id == null || _context.Game == null)
+          if (_context.Game == null)
+          {
+              return Problem("Entity set 'LmsApiContext.Game'  is null.");
+          }
+            _context.Game.Add(game);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetGame", new { id = game.Id }, game);
+        }
+
+        // DELETE: api/Games/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGame(int id)
+        {
+            if (_context.Game == null)
             {
                 return NotFound();
             }
-
-            var game = await _context.Game
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var game = await _context.Game.FindAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
 
-            return View(game);
-        }
-
-        // POST: Games/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Game == null)
-            {
-                return Problem("Entity set 'LmsApiContext.Game'  is null.");
-            }
-            var game = await _context.Game.FindAsync(id);
-            if (game != null)
-            {
-                _context.Game.Remove(game);
-            }
-            
+            _context.Game.Remove(game);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool GameExists(int id)
         {
-          return (_context.Game?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Game?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
