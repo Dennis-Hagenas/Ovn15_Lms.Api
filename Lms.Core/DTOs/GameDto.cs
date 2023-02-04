@@ -1,5 +1,4 @@
-﻿using Lms.Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.DTOs
 {
-    public class TournamentDto
+    public class GameDto
     {
         public string Title { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime Time { get; set; }
     }
 }
