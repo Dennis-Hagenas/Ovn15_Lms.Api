@@ -2,6 +2,7 @@
 using Lms.Core.Entities;
 using Lms.Data.Repositories;
 using AutoMapper;
+using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
 {
@@ -10,9 +11,9 @@ namespace Lms.Api.Controllers
     public class TournamentsController : ControllerBase
     {
         private IUnitOfWork uow;
-        private readonly Mapper mapper;
+        private readonly IMapper mapper;
 
-        public TournamentsController(IUnitOfWork unitOfWork, Mapper mapper)
+        public TournamentsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             uow = unitOfWork;
             this.mapper = mapper;
@@ -20,11 +21,27 @@ namespace Lms.Api.Controllers
 
         // GET: api/Tournaments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includeGames)
         {
-            var events = await uow.TournamenRepository.GetAllAsync();
+            var tournament = await uow.TournamentRepository.GetAllAsync(includeGames);
+            var dto = mapper.Map<IEnumerable<TournamentDto>>(tournament);
 
-            return Ok(events);    
+            return Ok(dto);
+        }
+        // GET: api/Tournaments
+        [HttpGet]
+        [Route("{title}")]
+        public async Task<ActionResult<TournamentDto>> GetTournament(string title, bool includeGames)
+        {
+            if (string.IsNullOrWhiteSpace(title)) return BadRequest();
+
+            var tournament = await uow.TournamentRepository.GetAsync(title, includeGames);
+
+            if(tournament == null) return NotFound();
+
+            var dto = mapper.Map<TournamentDto>(tournament);
+
+            return Ok(dto);
         }
     }
 }

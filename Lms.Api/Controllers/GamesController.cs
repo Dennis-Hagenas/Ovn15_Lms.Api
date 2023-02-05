@@ -17,9 +17,9 @@ namespace Lms.Api.Controllers
     public class GamesController : ControllerBase
     {
         private readonly IUnitOfWork uow;
-        private readonly Mapper mapper;
+        private readonly IMapper mapper;
 
-        public GamesController(IUnitOfWork unitOfWork, Mapper mapper)
+        public GamesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             uow = unitOfWork;
             this.mapper = mapper;
@@ -30,7 +30,8 @@ namespace Lms.Api.Controllers
         public async Task<ActionResult<IEnumerable<Game>>> GetGame()
         {
             var games = await uow.GameRepository.GetAllAsync();
-            return Ok(games);
+            var dto = mapper.Map<Game>(games);
+            return Ok(dto);
         }
 
         //// GET: api/Games/5

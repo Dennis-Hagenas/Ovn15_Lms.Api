@@ -18,10 +18,26 @@ namespace Lms.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<Tournament>> GetAllAsync()
+        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames)
         {
-            return await db.Tournament.ToListAsync();
+            return includeGames ? await db.Tournament.Include(c => c.Games).ToListAsync()
+                : await db.Tournament.ToListAsync();
         }
+
+        public async Task<Tournament> GetAsync(string title, bool includeGames)
+        {
+            var query = db.Tournament
+                .AsQueryable();
+
+            if (includeGames)
+            {
+                query = query.Include(g => g.Games);
+            }
+
+            return 
+                 await query.FirstOrDefaultAsync(g => g.Title == title);
+        }
+
 
         public async Task<Tournament> GetAsync(int id)
         {

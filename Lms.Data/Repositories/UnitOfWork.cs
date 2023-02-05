@@ -10,13 +10,13 @@ namespace Lms.Data.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LmsApiContext db;
-        public ITournamentRepository TournamenRepository { get; }
+        public ITournamentRepository TournamentRepository { get; }
         public IGameRepository GameRepository { get; }
 
         public UnitOfWork(LmsApiContext db)
         {
             this.db = db;
-            TournamenRepository = new TournamentRepository(db);
+            TournamentRepository = new TournamentRepository(db);
             GameRepository = new GameRepository(db);
         }
 
