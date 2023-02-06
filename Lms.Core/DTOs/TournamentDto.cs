@@ -12,6 +12,7 @@ namespace Lms.Core.DTOs
     public class TournamentDto
     {
         public int Id { get; set; }
+        [Required, MaxLength(50)]
         public string Title { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

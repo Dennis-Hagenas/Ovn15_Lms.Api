@@ -10,6 +10,8 @@ namespace Lms.Core.Entities
     public class Tournament
     {
         public int Id { get; set; }
+        [Required, MaxLength(50)]
+
         public string Title { get; set; } = string.Empty;
         [Required]
         public DateTime? StartDate { get; set; }
