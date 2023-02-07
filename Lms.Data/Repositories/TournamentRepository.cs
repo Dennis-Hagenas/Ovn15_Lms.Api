@@ -18,13 +18,13 @@ namespace Lms.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames)
+        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames = false)
         {
             return includeGames ? await db.Tournament.Include(c => c.Games).ToListAsync()
                 : await db.Tournament.ToListAsync();
         }
 
-        public async Task<Tournament> GetAsync(string title, bool includeGames)
+        public async Task<Tournament> GetAsync(string title, bool includeGames = false)
         {
             var query = db.Tournament
                 .AsQueryable();
@@ -60,6 +60,16 @@ namespace Lms.Data.Repositories
         public void Remove(Tournament tournament)
         {
             db.Remove(tournament);
+        }
+
+        public async Task AddAsync(Tournament tournament)
+        {
+            if (tournament is null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            await db.Tournament.AddAsync(tournament);
         }
     }
 }

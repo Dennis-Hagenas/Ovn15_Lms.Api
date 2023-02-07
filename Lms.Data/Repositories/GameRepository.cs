@@ -13,7 +13,7 @@ namespace Lms.Data.Repositories
             this.db = db;
         }
 
-        public async Task<IEnumerable<Game>> GetAllAsync()
+        public async Task<List<Game>> GetAllAsync()
         {
             return await db.Game.ToListAsync();
         }

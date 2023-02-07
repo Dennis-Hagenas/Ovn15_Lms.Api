@@ -45,7 +45,20 @@ namespace Lms.Api.Controllers
         }
 
 
-        [HttpPost]
+       [HttpPost]
+       public async Task<ActionResult<TournamentDto>> CreateTournament(CreateTournamentDto dto)
+        {
+            if (await uow.TournamentRepository.GetAsync(dto.Title) != null)
+            {
+                ModelState.AddModelError("Name", "Name exists");
+                return BadRequest();
+            }
+
+            var tournament = mapper.Map<Tournament>(dto);
+            await uow.TournamentRepository.AddAsync(tournament);
+            await uow.CompleteAsync();
+            return CreatedAtAction(nameof(GetTournament), new {name = tournament.Title},mapper.Map<TournamentDto>(dto));
+        }
 
     }
 }

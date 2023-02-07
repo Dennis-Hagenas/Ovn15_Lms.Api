@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Data.Repositories;
 using AutoMapper;
+using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/games")]
     [ApiController]
     public class GamesController : ControllerBase
     {
@@ -29,8 +25,9 @@ namespace Lms.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Game>>> GetGame()
         {
-            var games = await uow.GameRepository.GetAllAsync();
-            var dto = mapper.Map<Game>(games);
+            List<Game> games = await uow.GameRepository.GetAllAsync();
+            var dto = mapper.Map<GameDto>(games);
+
             return Ok(dto);
         }
 
