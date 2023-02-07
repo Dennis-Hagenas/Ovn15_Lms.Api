@@ -23,10 +23,10 @@ namespace Lms.Api.Controllers
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame()
         {
             List<Game> games = await uow.GameRepository.GetAllAsync();
-            var dto = mapper.Map<GameDto>(games);
+            var dto = mapper.Map<IEnumerable<GameDto>>(games);
 
             return Ok(dto);
         }
