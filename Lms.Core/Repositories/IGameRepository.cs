@@ -8,6 +8,7 @@ namespace Lms.Data.Repositories
         Task<bool> AnyAsync(int id);
         Task<List<Game>> GetAllAsync();
         Task<Game> GetAsync(int id);
+        Task<Game> GetAsync(string id);
         void Remove(Game game);
         void Update(Game game);
     }

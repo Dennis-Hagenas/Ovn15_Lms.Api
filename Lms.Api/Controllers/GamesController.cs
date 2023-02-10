@@ -32,6 +32,17 @@ namespace Lms.Api.Controllers
         }
 
 
+        // GET: api/Games
+        [HttpGet]
+        [Route("{title}")]
+
+        public async Task<ActionResult<GameDto>> GetGame(string title)
+        {
+            var game = await uow.GameRepository.GetAsync(title);
+            var dto = mapper.Map<GameDto>(game);
+
+            return Ok(dto);
+        }
 
 
 

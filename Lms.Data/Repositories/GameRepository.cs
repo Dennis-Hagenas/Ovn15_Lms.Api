@@ -22,6 +22,10 @@ namespace Lms.Data.Repositories
         {
             return db.Game.FirstOrDefault(g => g.Id == id);
         }
+        public async Task<Game> GetAsync(string title)
+        {
+            return db.Game.FirstOrDefault(g => g.Title == title);
+        }
 
         public Task<bool> AnyAsync(int id)
         {
