@@ -9,7 +9,7 @@ namespace Lms.Data.Repositories
         Task<bool> AnyAsync(int id);
         Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames = false);
         Task<Tournament> GetAsync(string title, bool includeGames = false);
-        Task<Tournament> GetAsync(int id);
+        Task<Tournament> GetAsync(int id, bool includeGames = false);
         void Remove(Tournament tournament);
         void Update(Tournament tournament);
     }

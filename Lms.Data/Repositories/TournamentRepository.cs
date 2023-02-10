@@ -39,9 +39,18 @@ namespace Lms.Data.Repositories
         }
 
 
-        public async Task<Tournament> GetAsync(int id)
+        public async Task<Tournament> GetAsync(int id, bool includeGames = false)
         {
-            return db.Tournament.FirstOrDefault(g => g.Id == id);
+            var query = db.Tournament
+                         .AsQueryable();
+
+            if (includeGames)
+            {
+                query = query.Include(g => g.Games);
+            }
+
+            return
+                 await query.FirstOrDefaultAsync(g => g.Id == id);
         }
 
         public Task<bool> AnyAsync(int id)
